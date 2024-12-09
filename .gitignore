@@ -1,0 +1,5 @@
+.DS_Store
+.vscode
+VOCdevkit/**
+coco4dpm/annotations/**
+coco4dpm/.ipynb_checkpoints/**
