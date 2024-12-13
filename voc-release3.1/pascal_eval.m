@@ -8,7 +8,7 @@ pascal_init;
 ids = textread(sprintf(VOCopts.imgsetpath, testset), '%s');
 
 % write out detections in PASCAL format and score
-fid = fopen(sprintf(VOCopts.detrespath, 'on_coco_head_', cls), 'w');
+fid = fopen(sprintf(VOCopts.detrespath, '_comp_jp_', cls), 'w');
 for i = 1:length(ids);
   bbox = boxes{i};
   for j = 1:size(bbox,1)
@@ -19,10 +19,11 @@ fclose(fid);
 
 VOCopts.testset = testset;
 if VOCdevkit2006
-  [recall, prec, ap] = VOCpr(VOCopts, 'on_coco_head_', cls, true);
+  [recall, prec, ap] = VOCpr(VOCopts, '_comp_jp_', cls, true);
 end
 if VOCdevkit2007 || VOCdevkit2008
-  [recall, prec, ap] = VOCevaldet(VOCopts, 'on_coco_head_', cls, true);
+  [recall, prec, ap] = VOCevaldet(VOCopts, '_comp_jp_', cls, true);
+  % [recall, prec, ap, tp, fp] = VOCevaldet(VOCopts, '_comp_head_', cls, true);
 end
 
 % force plot limits
@@ -30,5 +31,5 @@ ylim([0 1]);
 xlim([0 1]);
 
 % save results
-save([cachedir cls '_on_coco_head_' testset '_' suffix], 'recall', 'prec', 'ap');
-print(gcf, '-djpeg', '-r0', [cachedir cls '_on_coco_head_' testset '_' suffix '.jpg']);
+save([cachedir cls '_comp_jp_' testset '_' suffix], 'recall', 'prec', 'ap');
+print(gcf, '-djpeg', '-r0', [cachedir cls '_comp_jp_' testset '_' suffix '.jpg']);

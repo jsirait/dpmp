@@ -8,6 +8,7 @@ globals;
 spos = split(pos, n);
 
 % train root filters using warped positives & random negatives
+fprintf('train root filters using warped positives & random negatives\n');
 try
   load([cachedir cls '_random']);
 catch
@@ -19,6 +20,7 @@ catch
 end
 
 % merge models and train using latent detections & hard negatives
+fprintf('merge models and train using latent detections & hard negatives\n');
 try 
   load([cachedir cls '_hard']);
 catch
@@ -28,6 +30,7 @@ catch
 end
 
 % add parts and update models using latent detections & hard negatives.
+fprintf('add parts and update models using latent detections & hard negatives\n');
 try 
   load([cachedir cls '_parts']);
 catch
@@ -41,6 +44,7 @@ catch
 end
 
 % update models using full set of negatives.
+fprintf('update models using full set of negatives\n');
 try 
   load([cachedir cls '_mine']);
 catch
@@ -50,6 +54,7 @@ catch
 end
 
 % train bounding box prediction
+fprintf('train bounding box prediction\n');
 try
   load([cachedir cls '_final']);
 catch
