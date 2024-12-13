@@ -3,3 +3,7 @@
 VOCdevkit/**
 coco4dpm/annotations/**
 coco4dpm/.ipynb_checkpoints/**
+voc-release3.1/almost_complete_voccache/**
+voc-release3.1/voccache_coco/**
+voc-release3.1/voccache_pascal/**
+voc-release3.1/tmp/**
