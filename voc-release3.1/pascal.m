@@ -13,6 +13,7 @@ ap1 = pascal_eval(cls, boxes1, 'test', ['1_' VOCyear]);
 ap2 = pascal_eval(cls, boxes2, 'test', ['2_' VOCyear]);
 ap = [ap1 ap2];
 
+% For inference with parts detectors
 % [boxes_with_head, boxes_with_upperbody, boxes_with_lowerbody, boxes_with_one, boxes_with_two, boxes_with_all] = pascal_test(cls, model, 'test', VOCyear);
 % ap_with_head = pascal_eval(cls, boxes_with_head, 'test', 'with_head');
 % ap_with_upperbody = pascal_eval(cls, boxes_with_upperbody, 'test', 'with_upperbody');

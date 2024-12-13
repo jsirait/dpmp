@@ -5,7 +5,6 @@ function result = bbox_intersection(a, b)
         result = zeros(0, 5);
     else
 
-        % Get the extents of all bounding boxes
         [x_min, x_max, y_min, y_max] = compute_extents([a; b]);
 
         % Define grid cell size based on average box size 
@@ -13,21 +12,13 @@ function result = bbox_intersection(a, b)
         avg_height = mean([a(:, 4) - a(:, 2); b(:, 4) - b(:, 2)]);
         cell_size = [avg_width, avg_height];
 
-        % Create the grid
         grid = create_grid(a, x_min, x_max, y_min, y_max, cell_size);
-
-        % Initialize result
         result = [];
 
-        % Iterate over each box in `b`
         for i = 1:size(b, 1)
             box_b = b(i, :);
             b_area = compute_area(box_b);
-
-            % Find grid cells overlapping with `box_b`
             overlapping_cells = find_cells_for_box(box_b, x_min, y_min, cell_size);
-
-            % Collect candidates from the grid
             candidates = [];
             for cell_idx = 1:size(overlapping_cells, 1)
                 row = overlapping_cells(cell_idx, 1);
@@ -38,29 +29,20 @@ function result = bbox_intersection(a, b)
             end
 
             candidates = unique(candidates); % Remove duplicates
-
-            % Compare candidates with `box_b`
             for j = 1:numel(candidates)
                 box_a_idx = candidates(j);
                 box_a = a(box_a_idx, :);
-
-                % Compute intersection area
                 intersection_area = compute_intersection(box_a, box_b);
-
-                % Check if it satisfies the 50% condition
                 if intersection_area >= 0.5 * b_area
                     result = [result; box_a];
                 end
             end
         end
-
-        % Remove duplicates in the result
         result = unique(result, 'rows');
     end
 end
 
 function [x_min, x_max, y_min, y_max] = compute_extents(boxes)
-    % Compute the overall spatial extents of the bounding boxes
     x_min = min(boxes(:, 1));
     x_max = max(boxes(:, 3));
     y_min = min(boxes(:, 2));
@@ -68,14 +50,9 @@ function [x_min, x_max, y_min, y_max] = compute_extents(boxes)
 end
 
 function grid = create_grid(boxes, x_min, x_max, y_min, y_max, cell_size)
-    % Calculate number of rows and columns for the grid
     num_rows = ceil((y_max - y_min) / cell_size(2));
     num_cols = ceil((x_max - x_min) / cell_size(1));
-
-    % Initialize the grid as a cell array
     grid = cell(num_rows, num_cols);
-
-    % Assign each box to the grid cells it overlaps
     for i = 1:size(boxes, 1)
         box = boxes(i, :);
         cells = find_cells_for_box(box, x_min, y_min, cell_size);
@@ -90,26 +67,22 @@ function grid = create_grid(boxes, x_min, x_max, y_min, y_max, cell_size)
 end
 
 function cells = find_cells_for_box(box, x_min, y_min, cell_size)
-    % Compute grid cell indices for the box
     col_min = max(1, floor((box(1) - x_min) / cell_size(1)) + 1);
     col_max = max(1, floor((box(3) - x_min) / cell_size(1)) + 1);
     row_min = max(1, floor((box(2) - y_min) / cell_size(2)) + 1);
     row_max = max(1, floor((box(4) - y_min) / cell_size(2)) + 1);
 
-    % Generate all cells for the box
     [rows, cols] = ndgrid(row_min:row_max, col_min:col_max);
     cells = [rows(:), cols(:)];
 end
 
 function area = compute_area(box)
-    % Compute the area of a bounding box
     width = max(0, box(3) - box(1));
     height = max(0, box(4) - box(2));
     area = width * height;
 end
 
 function intersection = compute_intersection(box1, box2)
-    % Compute the intersection area between two bounding boxes
     x1 = max(box1(1), box2(1));
     y1 = max(box1(2), box2(2));
     x2 = min(box1(3), box2(3));

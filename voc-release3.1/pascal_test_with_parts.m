@@ -37,29 +37,12 @@ function [boxes_with_head, boxes_with_upperbody, boxes_with_lowerbody, boxes_wit
         lowerbody_boxes = nms(clipboxes(im, all_lowerbody_boxes(:,[1 2 3 4 end])), 0.5);
         % then only use person boxes that contain at least 50% of any head box
         boxes_with_head{i} = bbox_intersection(just_person, head_boxes);
-        if isempty(boxes_with_head{i})
-          boxes_with_head{i} = [];
-        end
         boxes_with_upperbody{i} = bbox_intersection(just_person, upperbody_boxes);
-        if isempty(boxes_with_upperbody{i})
-          boxes_with_upperbody{i} = [];
-        end
         boxes_with_lowerbody{i} = bbox_intersection(just_person, lowerbody_boxes);
-        if isempty(boxes_with_lowerbody{i})
-          boxes_with_lowerbody{i} = [];
-        end
         boxes_with_one{i} = union_(union_(boxes_with_head{i}, boxes_with_upperbody{i}), boxes_with_lowerbody{i});
-        if isempty(boxes_with_one{i})
-          boxes_with_one{i} = [];
-        end
         boxes_with_two{i} = union_(union_(intersection_(boxes_with_head{i}, boxes_with_upperbody{i}), intersection_(boxes_with_head{i}, boxes_with_lowerbody{i})), intersection_(boxes_with_upperbody{i}, boxes_with_lowerbody{i}));
-        if isempty(boxes_with_two{i})
-          boxes_with_two{i} = [];
-        end
         boxes_with_all{i} = intersection_(boxes_with_head{i}, intersection_(boxes_with_upperbody{i}, boxes_with_lowerbody{i}));
-        if isempty(boxes_with_all{i})
-          boxes_with_all{i} = [];
-        end
+
       else
         boxes_with_head{i} = [];
         boxes_with_upperbody{i} = [];
